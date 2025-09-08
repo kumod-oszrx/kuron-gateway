@@ -2,12 +2,14 @@ import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+import { Enum } from '../../configs/enum';
+
 export const registerController = async (req: any, res: any) => {
   const { email, password } = req.body;
   try {
     // Kiểm tra user có tồn tại trong Payload
     const { data } = await axios.get(
-      `${process.env.PAYLOAD_URL}/api/users?where[email]=${email}`
+      `${process.env.PAYLOAD_URL || Enum.PAYLOAD_URL}/api/users?where[email]=${email}`
     );
     if (data.docs.length > 0)
       return res.status(400).json({ message: "User already exists" });
@@ -15,7 +17,7 @@ export const registerController = async (req: any, res: any) => {
     // Hash password trước khi tạo
     const hashed = await bcrypt.hash(password, 10);
 
-    const user = await axios.post(`${process.env.PAYLOAD_URL}/api/users`, {
+    const user = await axios.post(`${process.env.PAYLOAD_URL || Enum.PAYLOAD_URL}/api/users`, {
       email,
       password: hashed,
       role: "client",
