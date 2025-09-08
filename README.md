@@ -1,114 +1,80 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
-</p>
+# Kuron Gateway
 
-<h3 align="center">kuron-gateway</h3>
+This is an API Gateway built with Express.js that acts as a reverse proxy for various backend services. It is configured to handle REST and GraphQL requests and forward them to a downstream service, such as a PayloadCMS instance.
 
-<div align="center">
+## Features
 
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+- **Reverse Proxy**: Forwards incoming requests to the appropriate backend services.
+- **REST & GraphQL**: Supports both REST (`/api/r`) and GraphQL (`/api/g`) endpoints.
+- **Rate Limiting**: Basic rate-limiting is implemented to prevent abuse.
+- **Security**: Uses `helmet` for setting various HTTP headers to secure the app and `cors` for handling Cross-Origin Resource Sharing.
+- **Environment-based Configuration**: Uses `.env` files for easy configuration.
 
-</div>
+## Prerequisites
 
----
+- [Node.js](https://nodejs.org/) (v18.x or higher recommended)
+- [Yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/)
 
-<p align="center"> Few lines describing your project.
-    <br> 
-</p>
+## Getting Started
 
-## 📝 Table of Contents
+### 1. Clone the repository
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Deployment](#deployment)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
-
-## 🧐 About <a name = "about"></a>
-
-Write about 1-2 paragraphs describing the purpose of your project.
-
-## 🏁 Getting Started <a name = "getting_started"></a>
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them.
-
-```
-Give examples
+```bash
+git clone <your-repository-url>
+cd kuron-gateway
 ```
 
-### Installing
+### 2. Install dependencies
 
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
-```
-Give the example
+```bash
+yarn install
+# or
+npm install
 ```
 
-And repeat
+### 3. Set up environment variables
 
-```
-until finished
-```
+Create a `.env` file in the root of the project by copying the example file:
 
-End with an example of getting some data out of the system or using it for a little demo.
-
-## 🔧 Running the tests <a name = "tests"></a>
-
-Explain how to run the automated tests for this system.
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+```bash
+cp .env.example .env
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+Now, open the `.env` file and set the required variables:
 
 ```
-Give an example
+# The port the gateway will run on
+PORT=5000
+
+# The target URL for the downstream service (e.g., your PayloadCMS backend)
+PAYLOAD_URL=http://localhost:3000
 ```
 
-## 🎈 Usage <a name="usage"></a>
+## Available Scripts
 
-Add notes about how to use the system.
+- **`yarn dev`**: Starts the gateway in development mode with `ts-node`. The server will restart automatically on file changes.
+- **`yarn build`**: Compiles the TypeScript code to JavaScript in the `dist/` directory.
+- **`yarn start`**: Starts the gateway in production mode from the compiled code in the `dist/` directory.
 
-## 🚀 Deployment <a name = "deployment"></a>
+## API Endpoints
 
-Add additional notes about how to deploy this on a live system.
+The gateway exposes the following base paths, which are then proxied to the `PAYLOAD_URL`:
 
-## ⛏️ Built Using <a name = "built_using"></a>
+- **REST API**: `/api/r/*`
+  - Requests to this path are forwarded to the `/api/*` endpoint of the target service.
+  - Example: A request to `/api/r/posts` will be proxied to `{PAYLOAD_URL}/api/posts`.
 
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
+- **GraphQL API**: `/api/g`
+  - Requests to this path are forwarded to the `/api/graphql` endpoint of the target service.
 
-## ✍️ Authors <a name = "authors"></a>
+## Core Dependencies
 
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
+- **[Express.js](https://expressjs.com/)**: Fast, unopinionated, minimalist web framework for Node.js.
+- **[http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware)**: The middleware used for proxying requests.
+- **[cors](https://github.com/expressjs/cors)**: Middleware for enabling CORS.
+- **[helmet](https://helmetjs.github.io/)**: Helps secure Express apps by setting various HTTP headers.
+- **[express-rate-limit](https://github.com/express-rate-limit/express-rate-limit)**: Basic rate-limiting middleware.
+- **[dotenv](https://github.com/motdotla/dotenv)**: Loads environment variables from a `.env` file.
+- **[TypeScript](https://www.typescriptlang.org/)**: Superset of JavaScript that adds static types.
 
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
-
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
+(ending readme)
