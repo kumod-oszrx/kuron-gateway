@@ -3,7 +3,6 @@ import { Router } from 'express';
 
 import { Enum } from '../configs/enum';
 import authRouter from './auth';
-import router from './auth';
 
 const routers = Router();
 
@@ -30,6 +29,6 @@ routers.use("/g", async (req, res) => {
     res.send(response.data);
     // res.send(req.path)
 });
-router.use("/auth", authRouter);
+routers.use("/auth", authRouter);
 
 export default routers;
