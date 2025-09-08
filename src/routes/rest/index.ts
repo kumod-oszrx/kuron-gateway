@@ -9,7 +9,7 @@ restRouter.use(
   createProxyMiddleware({
     target: process.env.PAYLOAD_URL,
     changeOrigin: true,
-    pathRewrite: (path) => path.replace(/^\/api\/r/, "/api")
+    pathRewrite: (path, req) => path.replace("/api/r", "/api"),
   }),
 );
 

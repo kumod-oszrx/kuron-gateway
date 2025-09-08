@@ -6,7 +6,7 @@ const graphQlRouter = Router();
 graphQlRouter.get("/", createProxyMiddleware({
       target: process.env.PAYLOAD_URL,
       changeOrigin: true,
-      pathRewrite: (path) => path.replace(/^\/api\/g/, "/api/graphql"),
+      pathRewrite: (path, req) => path.replace("/api/g", "/api"),
     }));
 
 export default graphQlRouter;
